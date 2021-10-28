@@ -9,11 +9,50 @@ description = "A \"Hello, world!\" binary crate for the ESP32[XX] and ESP-IDF."
 repository = "https://github.com/ivmarkov/rust-esp32-std-mini"
 license = "MIT OR Apache-2.0"
 
+
+
+[patch.crates-io]
+polling = { git = "https://github.com/ivmarkov/polling" }
+socket2 = { git = "https://github.com/ivmarkov/socket2" }
+getrandom = { version = "0.2", git = "https://github.com/ivmarkov/getrandom.git" }
+getrandom1 = { version = "0.1", git = "https://github.com/ivmarkov/getrandom.git", package = "getrandom", branch = "0.1" }
+
+[profile.release]
+# symbols are nice and they don't increase the size on Flash
+debug = true
+opt-level = "z"
+
+[profile.dev]
+debug = true
+opt-level = "s"
+
 [features]
+experimental = ["esp-idf-svc/experimental", "embedded-svc/experimental"]
 native = ["esp-idf-sys/native"]
 
 [dependencies]
-esp-idf-sys = { version = "0.21.1", features = ["binstart"] }
+anyhow = {version = "1", features = ["backtrace"]}
+log = "0.4"
+esp-idf-sys = { version = "0.21", features = ["binstart"] }
+embedded-svc = "0.11"
+esp-idf-svc = "0.27"
+#esp-idf-hal = "0.21"
+esp-idf-hal = { path = "../esp-idf-hal" }
+#embedded-hal = "0.2"
+embedded-hal = { version = "=1.0.0-alpha.4" }
+nb = "1"
+embedded-graphics = "0.7"
+display-interface = "0.4"
+display-interface-spi = "0.4"
+st7789 = "0.6"
+
+atat = { version = "0.13.1", features = ["std", "derive", "bytes", "log"] }
+#atat = { path = "../atat/atat", features = ["std", "derive", "bytes", "log"] }
+heapless = "0.7"
+bbqueue = "0.5"
+
+#ublox-cellular-rs = { path = "../ublox-cellular-rs/ublox-cellular", features = [] }
+num-rational = "0.3.2"
 
 [build-dependencies]
 embuild = "0.24.5"
